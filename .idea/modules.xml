@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ShuttleService.iml" filepath="$PROJECT_DIR$/ShuttleService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/UTAShuttleService.iml" filepath="$PROJECT_DIR$/UTAShuttleService.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

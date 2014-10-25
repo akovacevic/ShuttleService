@@ -22,98 +22,44 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
+import android.content.Intent;
+
 
 public class MyActivity extends Activity {
-
-    String url = "http://signalr.adiskovacevic.com/echo";
-    com.zsoft.signala.Connection con = null;
-
-    GpsTracker gps = null;
-
-    TextView NameView = null;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
 
-        gps = new GpsTracker(MyActivity.this);
-
-        // check if GPS enabled
-        if (gps.canGetLocation()) {
-            double latitude = gps.getLatitude();
-            double longitude = gps.getLongitude();
-        }
-
-        con = new com.zsoft.signala.Connection(url, this, new LongPollingTransport()) {
-
-            @Override
-            public void OnError(Exception exception) {
-                Toast.makeText(MyActivity.this, "On error: " + exception.getMessage(), Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void OnMessage(String message) {
-                Toast.makeText(MyActivity.this, "Message: " + message, Toast.LENGTH_LONG).show();
-
-                try {
-                    JSONObject reader = new JSONObject(message);
-
-                    GpsCoordinates coordinates = new GpsCoordinates();
-
-                    coordinates.Location = reader.getString("Location");
-                    coordinates.Name = reader.getString("Name");
-                    coordinates.Latitude = reader.getDouble("Latitude");
-                    coordinates.Longitude = reader.getDouble("Longitude");
-
-                    TextView t = (TextView) findViewById(R.id.textView);
-
-                    String val = t.getText().toString();
-
-                    t.setText(val + "\nName: " + coordinates.Name + " Location: (" + coordinates.Latitude + ")-(" + coordinates.Longitude + ")");
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void OnStateChanged(StateBase oldState, StateBase newState) {
-
-                // Toast.makeText(MyActivity.this, "oldState: " + oldState.getState() + " newState: " + newState.getState(), Toast.LENGTH_LONG).show();
-            }
-        };
-
-        final Button start = (Button) findViewById(R.id.Start);
-        start.setOnClickListener(new View.OnClickListener() {
+        final Button button = (Button) findViewById(R.id.passanger);
+        button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-                startSignalRConnection();
-
+                startPassanger();
             }
         });
 
-        final Button send = (Button) findViewById(R.id.SendMessage);
-        send.setOnClickListener(new View.OnClickListener() {
+        final Button button2 = (Button) findViewById(R.id.driver);
+        button2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-                sendMessage();
-
+                startDriver();
             }
         });
 
-        final Button stop = (Button) findViewById(R.id.Stop);
-        stop.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+    }
 
-                stopSignalRConnection();
+    private void startPassanger()
+    {
+        Intent intent = new Intent(this,GoogleMaps.class);
+        intent.putExtra("test","test");
+        startActivity(intent);
+    }
 
-            }
-        });
-
-        NameView = (TextView) findViewById(R.id.editText);
+    private void startDriver()
+    {
+        Intent intent = new Intent(this,Driver.class);
+        intent.putExtra("test","test");
+        startActivity(intent);
     }
 
 
@@ -134,56 +80,6 @@ public class MyActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void startSignalRConnection() {
-        try {
-            //con.addHeader("Accept", "application/json");
-            con.Start();
-        } catch (Exception ex) {
-            Toast.makeText(MyActivity.this, "Exception: " + ex.getMessage(), Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private void stopSignalRConnection() {
-        try {
-            //con.addHeader("Accept", "application/json");
-            con.Stop();
-        } catch (Exception ex) {
-            Toast.makeText(MyActivity.this, "Exception: " + ex.getMessage(), Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private void sendMessage() {
-        try {
-
-            GpsCoordinates test = new GpsCoordinates();
-            test.Location = "0.0.0.0.1";
-            test.Name = NameView.getText().toString();
-            test.Latitude = gps.getLatitude();
-            test.Longitude = gps.getLongitude();
-
-            JSONStringer json = new JSONStringer().object()
-                    .key("Location").value(test.Location)
-                    .key("Name").value(test.Name)
-                    .key("Latitude").value(test.Latitude)
-                    .key("Longitude").value(test.Longitude).endObject();
-
-
-            con.Send(json.toString(), new SendCallback() {
-                public void OnError(Exception ex) {
-                    Toast.makeText(MyActivity.this, "Error when sending: " + ex.getMessage(), Toast.LENGTH_LONG).show();
-                }
-
-                public void OnSent(CharSequence message) {
-                    Toast.makeText(MyActivity.this, "Sent: " + message, Toast.LENGTH_SHORT).show();
-                }
-
-            });
-        } catch (Exception ex) {
-            Toast.makeText(MyActivity.this, "Exception: " + ex.getMessage(), Toast.LENGTH_LONG).show();
-        }
-
     }
 
 }
