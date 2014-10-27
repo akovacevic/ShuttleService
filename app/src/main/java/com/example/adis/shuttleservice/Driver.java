@@ -88,6 +88,7 @@ public class Driver extends Activity {
         button2.setEnabled(true);
         signalrManager.stop();
         locationListener = null;
+
     }
 
     private void send()
