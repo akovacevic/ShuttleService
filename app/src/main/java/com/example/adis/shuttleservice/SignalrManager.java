@@ -54,13 +54,13 @@ public class SignalrManager extends SendCallback
         con.Stop();
     }
 
-    public void sendMessage()
+    public void sendMessage(String name)
     {
         try {
 
             GpsCoordinates test = new GpsCoordinates();
             test.Location = "0.0.0.0.1";
-            test.Name = "Adis";
+            test.Name = name;
             test.Latitude = gps.getLatitude();
             test.Longitude = gps.getLongitude();
 

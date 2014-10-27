@@ -8,11 +8,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 
 public class Driver extends Activity {
     private SignalrManager signalrManager;
     private LocationListener locationListener;
+
+    private EditText text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,15 @@ public class Driver extends Activity {
             }
         });
 
+        final Button button3 = (Button) findViewById(R.id.SendMessage);
+        button3.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                send();
+            }
+        });
+
+        text = (EditText) findViewById(R.id.NameBox);
+
     }
 
     private void start()
@@ -47,7 +59,7 @@ public class Driver extends Activity {
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                signalrManager.sendMessage();
+                signalrManager.sendMessage(text.getText().toString());
 
             }
 
@@ -76,6 +88,13 @@ public class Driver extends Activity {
         button2.setEnabled(true);
         signalrManager.stop();
         locationListener = null;
+    }
+
+    private void send()
+    {
+        EditText text = (EditText) findViewById(R.id.NameBox);
+
+        signalrManager.sendMessage(text.getText().toString());
     }
 
     @Override
