@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,15 +33,15 @@ public class MyActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
 
-        final Button button = (Button) findViewById(R.id.passanger);
-        button.setOnClickListener(new View.OnClickListener() {
+        final ImageButton imgPassengerButton = (ImageButton) findViewById(R.id.passenger);
+        imgPassengerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startPassanger();
+                startPassenger();
             }
         });
 
-        final Button button2 = (Button) findViewById(R.id.driver);
-        button2.setOnClickListener(new View.OnClickListener() {
+        final ImageButton imgDriverButton = (ImageButton) findViewById(R.id.driver);
+        imgDriverButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startDriver();
             }
@@ -48,7 +49,7 @@ public class MyActivity extends Activity {
 
     }
 
-    private void startPassanger()
+    private void startPassenger()
     {
         Intent intent = new Intent(this,GoogleMaps.class);
         intent.putExtra("test","test");

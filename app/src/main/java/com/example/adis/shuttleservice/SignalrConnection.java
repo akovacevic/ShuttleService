@@ -23,9 +23,7 @@ public class SignalrConnection extends Connection implements Subject{
 
     public SignalrConnection(String url, Context context, ITransport transport) {
         super(url, context, transport);
-
         observers = new ArrayList<Observer>();
-
         this.context = context;
     }
 

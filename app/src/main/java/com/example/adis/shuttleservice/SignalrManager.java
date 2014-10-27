@@ -20,31 +20,24 @@ public class SignalrManager extends SendCallback
     private GpsTracker gps = null;
     private Context context;
     private LongPollingTransport transport;
-
     private ArrayList<Observer> observers;
 
     public SignalrManager(Context contextChoice, Observer o)
     {
         this.context = contextChoice;
-
         transport = new LongPollingTransport();
-
         gps = new GpsTracker(context);
-
         // check if GPS enabled
         if (gps.canGetLocation()) {
             double latitude = gps.getLatitude();
             double longitude = gps.getLongitude();
         }
-
         con = new SignalrConnection(url, context, transport);
-
         if( o != null)
             con.registerObserver(o);
     }
 
     public void start() {
-
         Toast.makeText(context, "testing the context", Toast.LENGTH_LONG).show();
         con.Start();
     }

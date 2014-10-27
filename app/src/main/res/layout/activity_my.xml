@@ -6,6 +6,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="@drawable/uni"
     tools:context=".MyActivity"
     android:id="@+id/Background">
 
@@ -16,50 +17,39 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
-        <Button
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Driver"
-            android:id="@+id/driver"
+            android:id="@+id/passenger"
+            android:src="@drawable/s"
+            android:contentDescription="Passenger"
+            android:layout_marginTop="71dp"
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="23dp"
-            android:layout_marginTop="108dp"
-            android:padding="25dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="10dp" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Passanger"
-            android:id="@+id/passanger"
-            android:padding="25dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="10dp"
-            android:layout_alignTop="@+id/driver"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
-        <Button
+
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Schedule"
+            android:id="@+id/driver"
+            android:src="@drawable/d"
+            android:contentDescription="Driver"
+            android:layout_alignBottom="@+id/passenger"
+            android:layout_toLeftOf="@+id/passenger"
+            android:layout_toStartOf="@+id/passenger"
+            android:layout_marginRight="70dp" />
+
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/schedule"
-            android:padding="25dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="10dp"
-            android:layout_below="@+id/driver"
-            android:layout_alignLeft="@+id/driver"
-            android:layout_alignStart="@+id/driver"
-            android:layout_marginLeft="72dp"
-            android:layout_marginTop="133dp" />
+            android:contentDescription="Schedule"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="58dp"
+            android:src="@drawable/sh"
+            />
     </RelativeLayout>
 </RelativeLayout>

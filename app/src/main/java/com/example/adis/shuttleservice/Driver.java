@@ -9,12 +9,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 
 public class Driver extends Activity {
     private SignalrManager signalrManager;
     private LocationListener locationListener;
-
     private EditText text;
 
     @Override
@@ -24,77 +25,67 @@ public class Driver extends Activity {
 
         signalrManager = new SignalrManager(this, null);
 
-        final Button button = (Button) findViewById(R.id.start);
-        button.setOnClickListener(new View.OnClickListener() {
+        final ImageButton imgStartButton = (ImageButton) findViewById(R.id.start);
+        imgStartButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 start();
             }
         });
+        final ImageButton imgStopButton = (ImageButton) findViewById(R.id.stop);
+        imgStopButton.setOnClickListener(new View.OnClickListener() {
 
-        final Button button2 = (Button) findViewById(R.id.stop);
-        button2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 stop();
             }
         });
 
-        final Button button3 = (Button) findViewById(R.id.SendMessage);
-        button3.setOnClickListener(new View.OnClickListener() {
+        final Button sendMsgButton = (Button) findViewById(R.id.SendMessage);
+        sendMsgButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 send();
             }
         });
-
         text = (EditText) findViewById(R.id.NameBox);
-
     }
 
     private void start()
     {
-        Button button = (Button) findViewById(R.id.stop);
-        button.setEnabled(true);
-        Button button2 = (Button) findViewById(R.id.start);
-        button2.setEnabled(false);
+        TextView txtView = (TextView) findViewById(R.id.runtxt);
+        txtView.setVisibility(View.VISIBLE);
+        ImageButton imgStopButton = (ImageButton) findViewById(R.id.stop);
+        imgStopButton.setVisibility(View.VISIBLE);
+        ImageButton imgStartButton = (ImageButton) findViewById(R.id.start);
+        imgStartButton.setVisibility(View.INVISIBLE);
         signalrManager.start();
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
                 signalrManager.sendMessage(text.getText().toString());
-
             }
-
             @Override
-            public void onStatusChanged(String s, int i, Bundle bundle) {
-
-            }
-
+            public void onStatusChanged(String s, int i, Bundle bundle) {}
             @Override
-            public void onProviderEnabled(String s) {
-
-            }
-
+            public void onProviderEnabled(String s) {}
             @Override
-            public void onProviderDisabled(String s) {
-
-            }
+            public void onProviderDisabled(String s) {}
         };
     }
 
     private void stop()
     {
-        Button button = (Button) findViewById(R.id.stop);
-        button.setEnabled(false);
-        Button button2 = (Button) findViewById(R.id.start);
-        button2.setEnabled(true);
+        TextView txtView = (TextView) findViewById(R.id.runtxt);
+        txtView.setVisibility(View.INVISIBLE);
+        ImageButton imgStopButton = (ImageButton) findViewById(R.id.stop);
+        imgStopButton.setVisibility(View.INVISIBLE);
+        ImageButton imgStartButton = (ImageButton) findViewById(R.id.start);
+        imgStartButton.setVisibility(View.VISIBLE);
         signalrManager.stop();
         locationListener = null;
-
     }
 
     private void send()
     {
         EditText text = (EditText) findViewById(R.id.NameBox);
-
         signalrManager.sendMessage(text.getText().toString());
     }
 
