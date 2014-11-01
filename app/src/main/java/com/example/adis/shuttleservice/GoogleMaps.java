@@ -1,7 +1,10 @@
 package com.example.adis.shuttleservice;
 
 import android.app.Activity;
+import android.location.Location;
 import android.os.Bundle;
+import android.view.WindowManager;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -23,24 +26,35 @@ public class GoogleMaps extends Activity implements Observer {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_google_maps);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         coordinates= new HashMap<String, GpsCoordinates>();
+
         signalrManager = new SignalrManager(this,this);
+
         gps = new GpsTracker(this);
-        LatLng current = new LatLng(gps.getLatitude(),gps.getLongitude());
+        Location location = gps.getLocation();
+        LatLng current = new LatLng(location.getLatitude(),location.getLongitude());
+
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
                 .getMap();
+
         Marker You = map.addMarker(new MarkerOptions().position(current)
                 .title("You"));
+
         Marker kiel = map.addMarker(new MarkerOptions()
                 .position(KIEL)
                 .title("Kiel")
                 .snippet("Kiel is cool")
                 .icon(BitmapDescriptorFactory
                         .fromResource(R.drawable.busicon)));
+
         // Move the camera instantly to hamburg with a zoom of 15.
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(current, 200));
+
         // Zoom in, animating the camera.
         map.animateCamera(CameraUpdateFactory.zoomTo(300), 1000, null);
+
         signalrManager.start();
     }
 
@@ -61,7 +75,8 @@ public class GoogleMaps extends Activity implements Observer {
                     .icon(BitmapDescriptorFactory
                     .fromResource(R.drawable.busicon)));
         }
-        LatLng current = new LatLng(gps.getLatitude(),gps.getLongitude());
+        Location location = gps.getLocation();
+        LatLng current = new LatLng(location.getLatitude(),location.getLongitude());
         map.addMarker(new MarkerOptions().position(current)
                 .title("You"));
     }

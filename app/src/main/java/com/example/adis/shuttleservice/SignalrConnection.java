@@ -4,9 +4,12 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.zsoft.signala.Connection;
+import com.zsoft.signala.hubs.HubConnection;
 import com.zsoft.signala.transport.ITransport;
 import com.zsoft.signala.transport.StateBase;
+import com.zsoft.signala.transport.longpolling.LongPollingTransport;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,7 +18,7 @@ import java.util.ArrayList;
 /**
  * Created by Adis on 10/20/2014.
  */
-public class SignalrConnection extends Connection implements Subject{
+public class SignalrConnection extends HubConnection implements Subject{
 
     private Context context;
 
@@ -39,19 +42,20 @@ public class SignalrConnection extends Connection implements Subject{
         try
         {
             JSONObject reader = new JSONObject(message);
+            JSONArray array = reader.getJSONArray("A");
+
+            String t = (String) array.get(0);
+            JSONObject reader2 = new JSONObject(t);
 
             GpsCoordinates coordinates = new GpsCoordinates();
-
-            coordinates.Location = reader.getString("Location");
-            coordinates.Name = reader.getString("Name");
-            coordinates.Latitude = reader.getDouble("Latitude");
-            coordinates.Longitude = reader.getDouble("Longitude");
+            coordinates.Name = reader2.getString("Name");
+            coordinates.Latitude = reader2.getDouble("Latitude");
+            coordinates.Longitude = reader2.getDouble("Longitude");
 
             for(Observer observer: observers)
             {
                 observer.update(coordinates);
             }
-
         }
         catch (JSONException e)
         {
@@ -69,6 +73,7 @@ public class SignalrConnection extends Connection implements Subject{
     {
         observers.add(o);
     }
+
     public void removeObserver(Observer o)
     {
         int i = observers.indexOf(o);

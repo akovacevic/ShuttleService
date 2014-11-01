@@ -1,8 +1,10 @@
 package com.example.adis.shuttleservice;
 
 import android.app.Activity;
+import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,6 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.security.Provider;
 
 
 public class Driver extends Activity {
@@ -26,8 +31,9 @@ public class Driver extends Activity {
         signalrManager = new SignalrManager(this, null);
 
         final ImageButton imgStartButton = (ImageButton) findViewById(R.id.start);
-        imgStartButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+        imgStartButton.setOnClickListener(new View.OnClickListener(){
+
+            public void onClick(View v){
                 start();
             }
         });
@@ -69,18 +75,26 @@ public class Driver extends Activity {
             @Override
             public void onProviderDisabled(String s) {}
         };
+
+        LocationManager manager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,3,locationListener);
+        //manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,5000,3, locationListener);
     }
 
     private void stop()
     {
         TextView txtView = (TextView) findViewById(R.id.runtxt);
         txtView.setVisibility(View.INVISIBLE);
+
         ImageButton imgStopButton = (ImageButton) findViewById(R.id.stop);
         imgStopButton.setVisibility(View.INVISIBLE);
+
         ImageButton imgStartButton = (ImageButton) findViewById(R.id.start);
         imgStartButton.setVisibility(View.VISIBLE);
+
         signalrManager.stop();
-        locationListener = null;
+        LocationManager manager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+        manager.removeUpdates(locationListener);
     }
 
     private void send()
