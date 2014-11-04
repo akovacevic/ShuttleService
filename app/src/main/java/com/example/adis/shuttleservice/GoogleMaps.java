@@ -1,6 +1,7 @@
 package com.example.adis.shuttleservice;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.WindowManager;
@@ -12,6 +13,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,6 +52,13 @@ public class GoogleMaps extends Activity implements Observer {
                 .snippet("Kiel is cool")
                 .icon(BitmapDescriptorFactory
                         .fromResource(R.drawable.busicon)));
+
+        Polyline orangeLine = map.addPolyline(new PolylineOptions()
+                .add(new LatLng(32.734316, -97.121659), new LatLng(32.734302, -97.119075),new LatLng(32.733384, -97.119092),new LatLng(32.733368, -97.117962) )
+                .width(25)
+                .color(Color.argb(100,237,145,33))
+                .geodesic(true));
+
 
         // Move the camera instantly to hamburg with a zoom of 15.
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(current, 200));

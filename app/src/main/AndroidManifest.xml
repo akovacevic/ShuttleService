@@ -42,7 +42,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDngG7KH4ukB_Nn5fP7xb9VWzqnwKJx16Q"/>
+            android:value="AIzaSyAPtgWCNwMWPOeAR2iPGxJnRjJ2DNfBjjY"/>
         <activity
             android:name=".Driver"
             android:label="@string/title_activity_driver" >
