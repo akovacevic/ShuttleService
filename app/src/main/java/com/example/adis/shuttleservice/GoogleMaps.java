@@ -56,12 +56,12 @@ public class GoogleMaps extends Activity implements Observer {
         Polyline orangeLine = map.addPolyline(new PolylineOptions()
                 .add(new LatLng(32.734316, -97.121659), new LatLng(32.734302, -97.119075),new LatLng(32.733384, -97.119092),new LatLng(32.733368, -97.117962) )
                 .width(25)
-                .color(Color.argb(100,237,145,33))
+                .color(Color.argb(255,237,145,33))
                 .geodesic(true));
 
 
-        // Move the camera instantly to hamburg with a zoom of 15.
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(current, 200));
+        // Move the camera instantly to hamburg with a zoom of 15
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(current, 100));
 
         // Zoom in, animating the camera.
         map.animateCamera(CameraUpdateFactory.zoomTo(300), 1000, null);
