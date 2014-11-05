@@ -134,6 +134,7 @@ public class GoogleMaps extends Activity implements Observer {
             String key = entry.getKey();
             GpsCoordinates gpsCoordinate = entry.getValue();
             LatLng coor = new LatLng(gpsCoordinate.Latitude,gpsCoordinate.Longitude);
+
             map.addMarker(new MarkerOptions().position(coor)
                     .title(key)
                     .icon(BitmapDescriptorFactory

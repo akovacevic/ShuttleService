@@ -66,6 +66,7 @@ public class Driver extends Activity {
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
+
                 signalrManager.sendMessage(text.getText().toString());
             }
             @Override

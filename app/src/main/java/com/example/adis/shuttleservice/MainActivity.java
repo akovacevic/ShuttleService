@@ -26,7 +26,7 @@ import org.json.JSONStringer;
 import android.content.Intent;
 
 
-public class MyActivity extends Activity {
+public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +47,19 @@ public class MyActivity extends Activity {
             }
         });
 
+        final ImageButton imgScheduleButton = (ImageButton) findViewById(R.id.schedule);
+        imgScheduleButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startSchedule();
+            }
+        });
+    }
+
+    private void startSchedule()
+    {
+        Intent intent = new Intent(this,Schedule.class);
+        intent.putExtra("test","test");
+        startActivity(intent);
     }
 
     private void startPassenger()
@@ -82,6 +95,5 @@ public class MyActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 }
 

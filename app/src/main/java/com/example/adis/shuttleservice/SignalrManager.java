@@ -91,6 +91,7 @@ public class SignalrManager
                     .key("Latitude").value(test.Latitude)
                     .key("Longitude").value(test.Longitude).endObject();
 
+
             List<String> args = new ArrayList<String>(1);
             args.add(json.toString());
 
