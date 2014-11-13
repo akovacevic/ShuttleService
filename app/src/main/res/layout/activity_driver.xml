@@ -17,20 +17,9 @@
         android:text="Bus Name"
         android:ems="10"
         android:id="@+id/NameBox"
-        android:layout_marginTop="92dp"
+        android:layout_marginTop="38dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Running..."
-        android:id="@+id/runtxt"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="46dp"
-        android:visibility="invisible"
-        />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -61,5 +50,50 @@
         android:layout_alignParentBottom="true"
         android:layout_alignLeft="@+id/stop"
         android:layout_alignStart="@+id/stop" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="5"
+        android:id="@+id/CapacityText"
+        android:layout_below="@+id/NameBox"
+        android:text="0"
+        android:layout_alignLeft="@+id/NameBox"
+        android:layout_alignStart="@+id/NameBox" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+"
+        android:id="@+id/addCapacity"
+        android:layout_below="@+id/NameBox"
+        android:layout_toRightOf="@+id/CapacityText"
+        android:layout_toEndOf="@+id/CapacityText"
+        android:layout_alignBottom="@+id/CapacityText" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-"
+        android:id="@+id/subtractCapacity"
+        android:layout_toEndOf="@+id/addCapacity"
+        android:layout_below="@+id/NameBox"
+        android:layout_toRightOf="@+id/addCapacity"
+        android:layout_alignBottom="@+id/CapacityText" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Running..."
+        android:id="@+id/runtxt"
+        android:visibility="invisible"
+        android:layout_toStartOf="@+id/subtractCapacity"
+        android:layout_marginTop="38dp"
+        android:layout_below="@+id/CapacityText"
+        android:layout_toLeftOf="@+id/subtractCapacity" />
 
 </RelativeLayout>

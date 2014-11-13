@@ -75,7 +75,7 @@ public class SignalrManager
         }
     }
 
-    public void sendMessage(String name)
+    public void sendMessage(String name, int capacity)
     {
         Toast.makeText(context,"sendingMessage",Toast.LENGTH_LONG);
         try
@@ -85,11 +85,13 @@ public class SignalrManager
             test.Name = name;
             test.Latitude = location.getLatitude();
             test.Longitude = location.getLongitude();
+            test.Capacity = capacity;
 
             JSONStringer json = new JSONStringer().object()
                     .key("Name").value(test.Name)
                     .key("Latitude").value(test.Latitude)
-                    .key("Longitude").value(test.Longitude).endObject();
+                    .key("Longitude").value(test.Longitude)
+                    .key("Capacity").value(test.Capacity).endObject();
 
 
             List<String> args = new ArrayList<String>(1);

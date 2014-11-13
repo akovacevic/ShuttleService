@@ -51,12 +51,28 @@ public class Driver extends Activity {
                 send();
             }
         });
+
+        final Button addCapacity = (Button) findViewById(R.id.addCapacity);
+        addCapacity.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                increment();
+            }
+        });
+
+        final Button subCapacity = (Button) findViewById(R.id.subtractCapacity);
+        subCapacity.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                decrement();
+            }
+        });
+
         text = (EditText) findViewById(R.id.NameBox);
     }
 
     private void start()
     {
         TextView txtView = (TextView) findViewById(R.id.runtxt);
+        final TextView capacity = (TextView) findViewById(R.id.CapacityText);
         txtView.setVisibility(View.VISIBLE);
         ImageButton imgStopButton = (ImageButton) findViewById(R.id.stop);
         imgStopButton.setVisibility(View.VISIBLE);
@@ -66,8 +82,7 @@ public class Driver extends Activity {
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-
-                signalrManager.sendMessage(text.getText().toString());
+                signalrManager.sendMessage(text.getText().toString(), Integer.parseInt(capacity.getText().toString()));
             }
             @Override
             public void onStatusChanged(String s, int i, Bundle bundle) {}
@@ -101,7 +116,31 @@ public class Driver extends Activity {
     private void send()
     {
         EditText text = (EditText) findViewById(R.id.NameBox);
-        signalrManager.sendMessage(text.getText().toString());
+        EditText capacity = (EditText) findViewById(R.id.CapacityText);
+        signalrManager.sendMessage(text.getText().toString(), Integer.parseInt(capacity.getText().toString()));
+    }
+
+    private void increment()
+    {
+        EditText text = (EditText) findViewById(R.id.CapacityText);
+
+        int capacity = Integer.parseInt(text.getText().toString());
+
+        capacity = capacity + 1;
+
+        text.setText(Integer.toString(capacity));
+
+    }
+
+    private void decrement()
+    {
+        EditText text = (EditText) findViewById(R.id.CapacityText);
+
+        int capacity = Integer.parseInt(text.getText().toString());
+
+        if(capacity > 0)
+            capacity = capacity - 1;
+        text.setText(Integer.toString(capacity));
     }
 
     @Override

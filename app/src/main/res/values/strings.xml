@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">ShuttleService</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_map_pane">MapPane</string>
     <string name="title_activity_google_maps">GoogleMaps</string>
     <string name="title_activity_driver">Driver</string>
     <string name="title_activity_schedule">Schedule</string>
-    <string name="bus_schedule">Bus Schedule</string>
-
+    <string name="capacity">Capacity</string>
+    <string name="bus_schedule">UTA Bus Schedule</string>
 </resources>

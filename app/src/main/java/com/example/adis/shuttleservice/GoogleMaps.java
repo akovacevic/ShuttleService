@@ -28,6 +28,8 @@ public class GoogleMaps extends Activity implements Observer {
 
     private Polyline orangeLine;
     private Polyline greenLine;
+    private Polyline redLine;
+    private Polyline blueLine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,13 +51,44 @@ public class GoogleMaps extends Activity implements Observer {
         Marker You = map.addMarker(new MarkerOptions().position(current)
                 .title("You"));
 
-        Marker kiel = map.addMarker(new MarkerOptions()
-                .position(KIEL)
-                .title("Kiel")
-                .snippet("Kiel is cool")
-                .icon(BitmapDescriptorFactory
-                        .fromResource(R.drawable.busicon)));
+        addConstants();
 
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(current, 5));
+
+        // Zoom in, animating the camera.
+        map.animateCamera(CameraUpdateFactory.zoomTo(15), 1000, null);
+
+        signalrManager.start();
+    }
+
+    @Override
+    public void update(GpsCoordinates gpsCoordinates)
+    {
+        if(gpsCoordinates.Latitude == 0.0 && gpsCoordinates.Longitude == 0.0)
+            return;
+        coordinates.put(gpsCoordinates.Name, gpsCoordinates);
+        map.clear();
+        for(Map.Entry<String,GpsCoordinates> entry : coordinates.entrySet())
+        {
+            String key = entry.getKey();
+            GpsCoordinates gpsCoordinate = entry.getValue();
+            LatLng coor = new LatLng(gpsCoordinate.Latitude,gpsCoordinate.Longitude);
+            map.addMarker(new MarkerOptions().position(coor)
+                    .title(key + ", Capacity: " + gpsCoordinate.Capacity)
+                    .icon(BitmapDescriptorFactory
+                    .fromResource(R.drawable.busicon)));
+        }
+        Location location = gps.getLocation();
+        LatLng current = new LatLng(location.getLatitude(),location.getLongitude());
+        map.addMarker(new MarkerOptions().position(current)
+                .title("You"));
+
+        addConstants();
+
+    }
+
+    private void addConstants()
+    {
         orangeLine = map.addPolyline(new PolylineOptions()
                 .add(new LatLng(32.734316, -97.121659),
                         new LatLng(32.734302, -97.119075),
@@ -113,36 +146,65 @@ public class GoogleMaps extends Activity implements Observer {
                 .color(Color.GREEN)
                 .geodesic(true));
 
-        // Move the camera instantly to hamburg with a zoom of 15
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(current, 100));
+        redLine = map.addPolyline(new PolylineOptions()
+                .add(new LatLng(32.732081, -97.111593),
+                        new LatLng(32.732054, -97.108622)
+                )
+                .width(15)
+                .color(Color.RED)
+                .geodesic(true));
 
-        // Zoom in, animating the camera.
-        map.animateCamera(CameraUpdateFactory.zoomTo(300), 1000, null);
-
-        signalrManager.start();
-    }
-
-    @Override
-    public void update(GpsCoordinates gpsCoordinates)
-    {
-        if(gpsCoordinates.Latitude == 0.0 && gpsCoordinates.Longitude == 0.0)
-            return;
-        coordinates.put(gpsCoordinates.Name, gpsCoordinates);
-        map.clear();
-        for(Map.Entry<String,GpsCoordinates> entry : coordinates.entrySet())
-        {
-            String key = entry.getKey();
-            GpsCoordinates gpsCoordinate = entry.getValue();
-            LatLng coor = new LatLng(gpsCoordinate.Latitude,gpsCoordinate.Longitude);
-
-            map.addMarker(new MarkerOptions().position(coor)
-                    .title(key)
-                    .icon(BitmapDescriptorFactory
-                    .fromResource(R.drawable.busicon)));
-        }
-        Location location = gps.getLocation();
-        LatLng current = new LatLng(location.getLatitude(),location.getLongitude());
-        map.addMarker(new MarkerOptions().position(current)
-                .title("You"));
+        blueLine = map.addPolyline(new PolylineOptions()
+                .add(new LatLng(32.734316, -97.121659),
+                        new LatLng(32.734302, -97.119075),
+                        new LatLng(32.733384, -97.119092),
+                        new LatLng(32.733368, -97.117962),
+                        new LatLng(32.733321, -97.117966),
+                        new LatLng(32.733315, -97.117700),
+                        new LatLng(32.732781, -97.117692),
+                        new LatLng(32.732711, -97.117619),
+                        new LatLng(32.732691, -97.116391),
+                        new LatLng(32.733892, -97.116353),
+                        new LatLng(32.734120, -97.116284),
+                        new LatLng(32.733820, -97.115197),
+                        new LatLng(32.733752, -97.114564),
+                        new LatLng(32.734962, -97.114537),
+                        new LatLng(32.734971, -97.112882),
+                        new LatLng(32.733705, -97.112895),
+                        new LatLng(32.733707, -97.112123),
+                        new LatLng(32.732096, -97.112145),
+                        new LatLng(32.732055, -97.108728),
+                        new LatLng(32.730133, -97.108765),
+                        new LatLng(32.730144, -97.109892),
+                        new LatLng(32.727184, -97.109951),
+                        new LatLng(32.727012, -97.111083),
+                        new LatLng(32.727012, -97.111083),
+                        new LatLng(32.727000, -97.111083),
+                        new LatLng(32.728391, -97.112211),
+                        new LatLng(32.728415, -97.116251),
+                        new LatLng(32.728588, -97.116407),
+                        new LatLng(32.730643, -97.116413),
+                        new LatLng(32.730656, -97.117948),
+                        new LatLng(32.730780, -97.118755),
+                        new LatLng(32.730816, -97.118956),
+                        new LatLng(32.730803, -97.125146),
+                        new LatLng(32.729591, -97.125154),
+                        new LatLng(32.729587, -97.124645),
+                        new LatLng(32.729447, -97.124651),
+                        new LatLng(32.729426, -97.125146),
+                        new LatLng(32.728038, -97.125156),
+                        new LatLng(32.727871, -97.125285),
+                        new LatLng(32.727878, -97.127560),
+                        new LatLng(32.725897, -97.127619),
+                        new LatLng(32.726009, -97.126851),
+                        new LatLng(32.726092, -97.126298),
+                        new LatLng(32.726102, -97.123724),
+                        new LatLng(32.729394, -97.123670),
+                        new LatLng(32.729399, -97.121702),
+                        new LatLng(32.734316, -97.121659)
+                )
+                .width(15)
+                .color(Color.BLUE)
+                .geodesic(true));
     }
 }

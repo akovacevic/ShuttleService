@@ -51,6 +51,7 @@ public class SignalrConnection extends HubConnection implements Subject{
             coordinates.Name = reader2.getString("Name");
             coordinates.Latitude = reader2.getDouble("Latitude");
             coordinates.Longitude = reader2.getDouble("Longitude");
+            coordinates.Capacity = reader2.getInt("Capacity");
 
             for(Observer observer: observers)
             {
