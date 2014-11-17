@@ -2,12 +2,19 @@ package com.example.adis.shuttleservice;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
+import android.util.Pair;
 import android.view.WindowManager;
+import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -22,7 +29,7 @@ import java.util.Map;
 public class GoogleMaps extends Activity implements Observer {
     static final LatLng KIEL = new LatLng(53.551, 9.993);
     private GoogleMap map;
-    private HashMap<String,GpsCoordinates> coordinates;
+    private HashMap<String,Pair<GpsCoordinates,Marker>> coordinates;
     private GpsTracker gps = null;
     private SignalrManager signalrManager;
 
@@ -37,7 +44,7 @@ public class GoogleMaps extends Activity implements Observer {
         setContentView(R.layout.activity_google_maps);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        coordinates= new HashMap<String, GpsCoordinates>();
+        coordinates= new HashMap<String, Pair<GpsCoordinates,Marker>>();
 
         signalrManager = new SignalrManager(this,this);
 
@@ -64,27 +71,22 @@ public class GoogleMaps extends Activity implements Observer {
     @Override
     public void update(GpsCoordinates gpsCoordinates)
     {
-        if(gpsCoordinates.Latitude == 0.0 && gpsCoordinates.Longitude == 0.0)
-            return;
-        coordinates.put(gpsCoordinates.Name, gpsCoordinates);
-        map.clear();
-        for(Map.Entry<String,GpsCoordinates> entry : coordinates.entrySet())
+        LatLng newCoor = new LatLng(gpsCoordinates.Latitude,gpsCoordinates.Longitude);
+
+        if(coordinates.containsKey(gpsCoordinates.Name))
         {
-            String key = entry.getKey();
-            GpsCoordinates gpsCoordinate = entry.getValue();
-            LatLng coor = new LatLng(gpsCoordinate.Latitude,gpsCoordinate.Longitude);
-            map.addMarker(new MarkerOptions().position(coor)
-                    .title(key + ", Capacity: " + gpsCoordinate.Capacity)
-                    .icon(BitmapDescriptorFactory
-                    .fromResource(R.drawable.busicon)));
+            Pair<GpsCoordinates,Marker> old = coordinates.get(gpsCoordinates.Name);
+
+            animateMarker(old.second,newCoor,false);
         }
-        Location location = gps.getLocation();
-        LatLng current = new LatLng(location.getLatitude(),location.getLongitude());
-        map.addMarker(new MarkerOptions().position(current)
-                .title("You"));
-
-        addConstants();
-
+        else
+        {
+            Marker marker = map.addMarker(new MarkerOptions().position(newCoor)
+                    .title(gpsCoordinates.Name + ", Capacity: " + gpsCoordinates.Capacity)
+                    .icon(BitmapDescriptorFactory
+                            .fromResource(R.drawable.busicon)));
+            coordinates.put(gpsCoordinates.Name, new Pair<GpsCoordinates,Marker>(gpsCoordinates,marker));
+        }
     }
 
     private void addConstants()
@@ -206,5 +208,42 @@ public class GoogleMaps extends Activity implements Observer {
                 .width(15)
                 .color(Color.BLUE)
                 .geodesic(true));
+    }
+
+    public void animateMarker(final Marker marker, final LatLng toPosition,
+                              final boolean hideMarker) {
+        final Handler handler = new Handler();
+        final long start = SystemClock.uptimeMillis();
+        Projection proj = map.getProjection();
+        Point startPoint = proj.toScreenLocation(marker.getPosition());
+        final LatLng startLatLng = proj.fromScreenLocation(startPoint);
+        final long duration = 500;
+
+        final Interpolator interpolator = new LinearInterpolator();
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long elapsed = SystemClock.uptimeMillis() - start;
+                float t = interpolator.getInterpolation((float) elapsed
+                        / duration);
+                double lng = t * toPosition.longitude + (1 - t)
+                        * startLatLng.longitude;
+                double lat = t * toPosition.latitude + (1 - t)
+                        * startLatLng.latitude;
+                marker.setPosition(new LatLng(lat, lng));
+
+                if (t < 1.0) {
+                    // Post again 16ms later.
+                    handler.postDelayed(this, 16);
+                } else {
+                    if (hideMarker) {
+                        marker.setVisible(false);
+                    } else {
+                        marker.setVisible(true);
+                    }
+                }
+            }
+        });
     }
 }

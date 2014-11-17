@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
