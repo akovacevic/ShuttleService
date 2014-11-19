@@ -3,14 +3,22 @@ package com.example.adis.shuttleservice;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Pair;
+import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ExpandableListView;
+import android.widget.ListView;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -23,15 +31,20 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class GoogleMaps extends Activity implements Observer {
     static final LatLng KIEL = new LatLng(53.551, 9.993);
     private GoogleMap map;
-    private HashMap<String,Pair<GpsCoordinates,Marker>> coordinates;
+    private HashMap<UUID,Pair<GpsCoordinates,Marker>> coordinates;
     private GpsTracker gps = null;
     private SignalrManager signalrManager;
+    private Button centerButton;
+    private Marker you;
+
 
     private Polyline orangeLine;
     private Polyline greenLine;
@@ -44,7 +57,7 @@ public class GoogleMaps extends Activity implements Observer {
         setContentView(R.layout.activity_google_maps);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        coordinates= new HashMap<String, Pair<GpsCoordinates,Marker>>();
+        coordinates= new HashMap<UUID, Pair<GpsCoordinates,Marker>>();
 
         signalrManager = new SignalrManager(this,this);
 
@@ -55,7 +68,8 @@ public class GoogleMaps extends Activity implements Observer {
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
                 .getMap();
 
-        Marker You = map.addMarker(new MarkerOptions().position(current)
+
+        you = map.addMarker(new MarkerOptions().position(current)
                 .title("You"));
 
         addConstants();
@@ -66,27 +80,52 @@ public class GoogleMaps extends Activity implements Observer {
         map.animateCamera(CameraUpdateFactory.zoomTo(15), 1000, null);
 
         signalrManager.start();
+
+        centerButton = (Button)findViewById(R.id.GoToLocationButton);
+
+        centerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                centerToMarker();
+            }
+        });
     }
 
     @Override
     public void update(GpsCoordinates gpsCoordinates)
     {
-        LatLng newCoor = new LatLng(gpsCoordinates.Latitude,gpsCoordinates.Longitude);
-
-        if(coordinates.containsKey(gpsCoordinates.Name))
+        try
         {
-            Pair<GpsCoordinates,Marker> old = coordinates.get(gpsCoordinates.Name);
+            LatLng newCoor = new LatLng(gpsCoordinates.Latitude, gpsCoordinates.Longitude);
 
-            animateMarker(old.second,newCoor,false);
+            if (coordinates.containsKey(gpsCoordinates.Guid)) {
+                Pair<GpsCoordinates, Marker> old = coordinates.get(gpsCoordinates.Guid);
+
+                animateMarker(old.second, newCoor, false);
+            }
+            else {
+                Marker marker = map.addMarker(new MarkerOptions().position(newCoor)
+                        .title(gpsCoordinates.Name + ", Capacity: " + gpsCoordinates.Capacity)
+                        .icon(BitmapDescriptorFactory
+                                .fromResource(R.drawable.busicon)));
+                coordinates.put(gpsCoordinates.Guid, new Pair<GpsCoordinates, Marker>(gpsCoordinates, marker));
+            }
         }
-        else
+        catch(Exception ex)
         {
-            Marker marker = map.addMarker(new MarkerOptions().position(newCoor)
-                    .title(gpsCoordinates.Name + ", Capacity: " + gpsCoordinates.Capacity)
-                    .icon(BitmapDescriptorFactory
-                            .fromResource(R.drawable.busicon)));
-            coordinates.put(gpsCoordinates.Name, new Pair<GpsCoordinates,Marker>(gpsCoordinates,marker));
+            ex.getStackTrace();
         }
+    }
+
+    private void centerToMarker()
+    {
+        Location newPosition = gps.getLocation();
+        LatLng newLatLng = new LatLng(newPosition.getLatitude(),newPosition.getLongitude());
+
+        animateMarker(you,newLatLng,false);
+
+        map.moveCamera(CameraUpdateFactory.newLatLng(newLatLng));
+
     }
 
     private void addConstants()
@@ -153,7 +192,7 @@ public class GoogleMaps extends Activity implements Observer {
                         new LatLng(32.732054, -97.108622)
                 )
                 .width(15)
-                .color(Color.RED)
+                .color(Color.argb(100,0,255,0))
                 .geodesic(true));
 
         blueLine = map.addPolyline(new PolylineOptions()
@@ -206,7 +245,7 @@ public class GoogleMaps extends Activity implements Observer {
                         new LatLng(32.734316, -97.121659)
                 )
                 .width(15)
-                .color(Color.BLUE)
+                .color(Color.argb(100,0,0,255))
                 .geodesic(true));
     }
 

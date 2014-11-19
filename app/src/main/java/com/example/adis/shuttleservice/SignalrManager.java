@@ -18,6 +18,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+import java.util.UUID;
 
 
 /**
@@ -32,6 +33,7 @@ public class SignalrManager
     private GpsTracker gps = null;
     private Context context;
     private ArrayList<Observer> observers;
+    private UUID guid;
 
     public SignalrManager(Context contextChoice, Observer o)
     {
@@ -49,6 +51,8 @@ public class SignalrManager
         {
             con.registerObserver(o);
         }
+
+        guid = UUID.randomUUID();
     }
 
     public void start()
@@ -87,11 +91,13 @@ public class SignalrManager
             test.Latitude = location.getLatitude();
             test.Longitude = location.getLongitude();
             test.Capacity = capacity;
+            test.Guid = guid;
 
             JSONStringer json = new JSONStringer().object()
                     .key("Name").value(test.Name)
                     .key("Latitude").value(test.Latitude)
                     .key("Longitude").value(test.Longitude)
+                    .key("Guid").value(test.Guid)
                     .key("Capacity").value(test.Capacity).endObject();
 
 

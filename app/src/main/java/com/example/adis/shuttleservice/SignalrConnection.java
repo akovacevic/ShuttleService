@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * Created by Adis on 10/20/2014.
@@ -52,6 +53,7 @@ public class SignalrConnection extends HubConnection implements Subject{
             coordinates.Latitude = reader2.getDouble("Latitude");
             coordinates.Longitude = reader2.getDouble("Longitude");
             coordinates.Capacity = reader2.getInt("Capacity");
+            coordinates.Guid = UUID.fromString(reader2.getString("Guid"));
 
             for(Observer observer: observers)
             {

@@ -93,7 +93,7 @@ public class Driver extends Activity {
         };
 
         LocationManager manager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,3,locationListener);
+        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,10,locationListener);
         //manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,5000,3, locationListener);
     }
 

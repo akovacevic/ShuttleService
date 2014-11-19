@@ -31,7 +31,7 @@ public class GpsTracker extends Service implements LocationListener {
     double longitude; // longitude
 
     // The minimum distance to change Updates in meters
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 3; // 10 meters
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
 
     // The minimum time between updates in milliseconds
     private static final long MIN_TIME_BW_UPDATES = 5000; // 1 minute
@@ -65,6 +65,8 @@ public class GpsTracker extends Service implements LocationListener {
             else
             {
                 this.canGetLocation = true;
+                // if GPS Enabled get lat/long using GPS Services
+
                 if (isNetworkEnabled) {
                     locationManager.requestLocationUpdates(
                             LocationManager.NETWORK_PROVIDER,
@@ -80,9 +82,10 @@ public class GpsTracker extends Service implements LocationListener {
                         }
                     }
                 }
-                // if GPS Enabled get lat/long using GPS Services
-                if (isGPSEnabled) {
-                    if (location == null) {
+                if (isGPSEnabled)
+                {
+                    if (location == null)
+                    {
                         locationManager.requestLocationUpdates(
                                 LocationManager.GPS_PROVIDER,
                                 MIN_TIME_BW_UPDATES,
