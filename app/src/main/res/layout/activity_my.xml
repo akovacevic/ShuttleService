@@ -51,5 +51,19 @@
             android:layout_marginBottom="58dp"
             android:src="@drawable/sh"
             />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="'@UTAShuttles"
+            android:id="@+id/twitterButton"
+            android:layout_alignParentBottom="true"
+            android:layout_alignLeft="@+id/schedule"
+            android:layout_alignStart="@+id/schedule"
+            android:layout_alignRight="@+id/schedule"
+            android:layout_alignEnd="@+id/schedule"
+            android:textColor="#ffffffff"
+            android:textStyle="bold"
+            android:typeface="sans"/>
     </RelativeLayout>
 </RelativeLayout>

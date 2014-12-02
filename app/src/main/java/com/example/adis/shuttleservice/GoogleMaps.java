@@ -1,12 +1,14 @@
 package com.example.adis.shuttleservice;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -45,6 +47,8 @@ public class GoogleMaps extends Activity implements Observer {
     private Button centerButton;
     private Marker you;
 
+    private ArrayList<Marker> stops;
+
 
     private Polyline orangeLine;
     private Polyline greenLine;
@@ -58,6 +62,8 @@ public class GoogleMaps extends Activity implements Observer {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         coordinates= new HashMap<UUID, Pair<GpsCoordinates,Marker>>();
+
+        stops = new ArrayList<Marker>();
 
         signalrManager = new SignalrManager(this,this);
 
@@ -100,6 +106,7 @@ public class GoogleMaps extends Activity implements Observer {
 
             if (coordinates.containsKey(gpsCoordinates.Guid)) {
                 Pair<GpsCoordinates, Marker> old = coordinates.get(gpsCoordinates.Guid);
+                old.second.setTitle(gpsCoordinates.Name + ", Capacity: " + gpsCoordinates.Capacity);
 
                 animateMarker(old.second, newCoor, false);
             }
@@ -130,6 +137,27 @@ public class GoogleMaps extends Activity implements Observer {
 
     private void addConstants()
     {
+        //Add all stops
+        stops.add(map.addMarker(new MarkerOptions().position(new LatLng(32.734214, -97.121572))
+                .icon(BitmapDescriptorFactory
+                        .fromResource(R.drawable.busstopicon))));
+
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if(stops.contains(marker))
+                {
+                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                            Uri.parse("http://maps.google.com/maps?saddr=" + you.getPosition().latitude + "," + you.getPosition().longitude +
+                                    "&daddr=" + marker.getPosition().latitude + "," + marker.getPosition().longitude));
+                    startActivity(intent);
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        //Add all routes
         orangeLine = map.addPolyline(new PolylineOptions()
                 .add(new LatLng(32.734316, -97.121659),
                         new LatLng(32.734302, -97.119075),

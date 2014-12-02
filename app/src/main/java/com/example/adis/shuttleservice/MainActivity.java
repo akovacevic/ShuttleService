@@ -6,6 +6,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,6 +52,15 @@ public class MainActivity extends Activity {
         imgScheduleButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startSchedule();
+            }
+        });
+
+        final Button twitterButton = (Button) findViewById(R.id.twitterButton);
+        twitterButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent twitter = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/UTAShuttles"));
+                startActivity(twitter);
+
             }
         });
     }

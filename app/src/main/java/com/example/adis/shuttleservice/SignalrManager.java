@@ -32,18 +32,12 @@ public class SignalrManager
     private IHubProxy hub = null;
     private GpsTracker gps = null;
     private Context context;
-    private ArrayList<Observer> observers;
     private UUID guid;
 
     public SignalrManager(Context contextChoice, Observer o)
     {
         this.context = contextChoice;
         gps = new GpsTracker(context);
-        // check if GPS enabled
-        if (gps.canGetLocation()) {
-            double latitude = gps.getLatitude();
-            double longitude = gps.getLongitude();
-        }
 
         con = new SignalrConnection(url, context, new LongPollingTransport());
 
