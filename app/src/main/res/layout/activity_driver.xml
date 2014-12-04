@@ -13,8 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:hint="Please enter the Bus Name"
-        android:text="Bus Name"
+        android:hint="Enter the Bus Name"
         android:ems="10"
         android:id="@+id/NameBox"
         android:layout_marginTop="38dp"
@@ -45,11 +44,10 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send Message"
+        android:text="Send Location Now"
         android:id="@+id/SendMessage"
         android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/stop"
-        android:layout_alignStart="@+id/stop" />
+        android:layout_centerHorizontal="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -59,6 +57,7 @@
         android:id="@+id/CapacityText"
         android:layout_below="@+id/NameBox"
         android:text="0"
+        android:hint="Capacity"
         android:layout_alignLeft="@+id/NameBox"
         android:layout_alignStart="@+id/NameBox" />
 

@@ -1,0 +1,78 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="@drawable/uni"
+    tools:context="com.example.adis.shuttleservice.AskRoutes">
+
+    <TextView
+        android:text="Bus Routes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="#ff020202"
+        android:textSize="30dp"/>
+
+    <CheckBox android:text="Orange Route"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/orangeCheckBox"
+        android:layout_marginTop="25dp"
+        android:textColor="#ff020202"
+        android:layout_marginLeft="28dp"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <CheckBox android:text="Blue Route"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/blueCheckBox"
+        android:layout_alignTop="@+id/orangeCheckBox"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="44dp" />
+
+    <CheckBox android:text="Yellow Route"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/yellowCheckBox"
+        android:layout_marginTop="29dp"
+        android:layout_below="@+id/orangeCheckBox"
+        android:layout_alignLeft="@+id/orangeCheckBox"
+        android:layout_alignStart="@+id/orangeCheckBox" />
+
+    <CheckBox android:text="Green Route"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/greenCheckBox"
+        android:layout_above="@+id/redCheckBox"
+        android:layout_alignLeft="@+id/blueCheckBox"
+        android:layout_alignStart="@+id/blueCheckBox" />
+
+    <CheckBox android:text="Red Route"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/redCheckBox"
+        android:layout_below="@+id/yellowCheckBox"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View Routes"
+        android:id="@+id/viewRoutes"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/redCheckBox"
+        android:layout_alignStart="@+id/redCheckBox"
+        android:layout_marginBottom="79dp" />
+
+
+</RelativeLayout>

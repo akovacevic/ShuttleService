@@ -32,14 +32,13 @@ public class Driver extends Activity {
 
         final ImageButton imgStartButton = (ImageButton) findViewById(R.id.start);
         imgStartButton.setOnClickListener(new View.OnClickListener(){
-
             public void onClick(View v){
                 start();
             }
         });
+
         final ImageButton imgStopButton = (ImageButton) findViewById(R.id.stop);
         imgStopButton.setOnClickListener(new View.OnClickListener() {
-
             public void onClick(View v) {
                 stop();
             }
@@ -54,16 +53,12 @@ public class Driver extends Activity {
 
         final Button addCapacity = (Button) findViewById(R.id.addCapacity);
         addCapacity.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                increment();
-            }
+            public void onClick(View v) { changeCapacity("add"); }
         });
 
         final Button subCapacity = (Button) findViewById(R.id.subtractCapacity);
         subCapacity.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                decrement();
-            }
+            public void onClick(View v) { changeCapacity("sub"); }
         });
 
         text = (EditText) findViewById(R.id.NameBox);
@@ -120,26 +115,21 @@ public class Driver extends Activity {
         signalrManager.sendMessage(text.getText().toString(), Integer.parseInt(capacity.getText().toString()));
     }
 
-    private void increment()
+    private void changeCapacity(String operation)
     {
         EditText text = (EditText) findViewById(R.id.CapacityText);
-
         int capacity = Integer.parseInt(text.getText().toString());
-
-        capacity = capacity + 1;
-
-        text.setText(Integer.toString(capacity));
-
-    }
-
-    private void decrement()
-    {
-        EditText text = (EditText) findViewById(R.id.CapacityText);
-
-        int capacity = Integer.parseInt(text.getText().toString());
-
-        if(capacity > 0)
-            capacity = capacity - 1;
+        if(operation=="add")
+        {
+            capacity+=1;
+        }
+        else
+        {
+            if(capacity>0)
+            {
+                capacity-=1;
+            }
+        }
         text.setText(Integer.toString(capacity));
     }
 

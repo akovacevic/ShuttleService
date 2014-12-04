@@ -74,7 +74,7 @@ public class MainActivity extends Activity {
 
     private void startPassenger()
     {
-        Intent intent = new Intent(this,GoogleMaps.class);
+        Intent intent = new Intent(this,AskRoutes.class);
         intent.putExtra("test","test");
         startActivity(intent);
     }

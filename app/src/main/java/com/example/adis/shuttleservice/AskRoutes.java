@@ -10,12 +10,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 
 
-public class Schedule extends Activity {
+public class AskRoutes extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_schedule);
+        setContentView(R.layout.activity_ask_routes);
         final CheckBox bluecheckBox = (CheckBox) findViewById(R.id.blueCheckBox);
         final CheckBox orangecheckBox = (CheckBox) findViewById(R.id.orangeCheckBox);
         final CheckBox yellowcheckBox = (CheckBox) findViewById(R.id.yellowCheckBox);
@@ -40,14 +40,13 @@ public class Schedule extends Activity {
                 startActivity(intent);
             }
         });
-
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.schedule, menu);
+        getMenuInflater().inflate(R.menu.ask_routes, menu);
         return true;
     }
 
