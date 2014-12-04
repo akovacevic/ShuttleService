@@ -28,7 +28,8 @@
         android:layout_marginLeft="28dp"
         android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:checked="false" />
 
     <CheckBox android:text="Blue Route"
         android:layout_width="wrap_content"
