@@ -21,6 +21,8 @@ import java.security.Provider;
 public class Driver extends Activity {
     private SignalrManager signalrManager;
     private LocationListener locationListener;
+    private GpsTracker gpsTracker;
+    private Location currentLocation;
     private EditText text;
 
     @Override
@@ -31,8 +33,8 @@ public class Driver extends Activity {
         signalrManager = new SignalrManager(this, null);
 
         final ImageButton imgStartButton = (ImageButton) findViewById(R.id.start);
-        imgStartButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
+        imgStartButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
                 start();
             }
         });
@@ -53,7 +55,9 @@ public class Driver extends Activity {
 
         final Button addCapacity = (Button) findViewById(R.id.addCapacity);
         addCapacity.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) { changeCapacity("add"); }
+            public void onClick(View v) {
+                changeCapacity("add");
+            }
         });
 
         final Button subCapacity = (Button) findViewById(R.id.subtractCapacity);
@@ -77,7 +81,8 @@ public class Driver extends Activity {
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                signalrManager.sendMessage(text.getText().toString(), Integer.parseInt(capacity.getText().toString()));
+                signalrManager.sendMessage(text.getText().toString(), Integer.parseInt(capacity.getText().toString()), location);
+                currentLocation = location;
             }
             @Override
             public void onStatusChanged(String s, int i, Bundle bundle) {}
@@ -86,9 +91,10 @@ public class Driver extends Activity {
             @Override
             public void onProviderDisabled(String s) {}
         };
-
-        LocationManager manager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,10,locationListener);
+        gpsTracker = new GpsTracker(this);
+        currentLocation = gpsTracker.getLocation();
+        //LocationManager manager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+        //manager.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,10,locationListener);
         //manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,5000,3, locationListener);
     }
 
@@ -112,7 +118,7 @@ public class Driver extends Activity {
     {
         EditText text = (EditText) findViewById(R.id.NameBox);
         EditText capacity = (EditText) findViewById(R.id.CapacityText);
-        signalrManager.sendMessage(text.getText().toString(), Integer.parseInt(capacity.getText().toString()));
+        signalrManager.sendMessage(text.getText().toString(), Integer.parseInt(capacity.getText().toString()),currentLocation);
     }
 
     private void changeCapacity(String operation)

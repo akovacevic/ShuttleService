@@ -30,15 +30,12 @@ public class SignalrManager
     private String url = "http://signalr2.adiskovacevic.com/signalr";
     private SignalrConnection con = null;
     private IHubProxy hub = null;
-    private GpsTracker gps = null;
     private Context context;
     private UUID guid;
 
     public SignalrManager(Context contextChoice, Observer o)
     {
         this.context = contextChoice;
-        gps = new GpsTracker(context);
-
         con = new SignalrConnection(url, context, new LongPollingTransport());
 
         if( o != null)
@@ -74,12 +71,11 @@ public class SignalrManager
         }
     }
 
-    public void sendMessage(String name, int capacity)
+    public void sendMessage(String name, int capacity, Location location)
     {
         Toast.makeText(context,"sendingMessage",Toast.LENGTH_LONG);
         try
         {
-            Location location = gps.getLocation();
             GpsCoordinates test = new GpsCoordinates();
             test.Name = name;
             test.Latitude = location.getLatitude();
