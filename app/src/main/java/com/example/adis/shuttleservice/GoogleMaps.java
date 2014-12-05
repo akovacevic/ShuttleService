@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,13 +34,13 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class GoogleMaps extends Activity implements Observer {
-    static final LatLng KIEL = new LatLng(53.551, 9.993);
     private GoogleMap map;
     private HashMap<UUID,Pair<GpsCoordinates,Marker>> coordinates;
-    private GpsTracker gps = null;
     private SignalrManager signalrManager;
     private Button centerButton;
     private Marker you;
+    private LocationManager manager;
+    private LocationListener locationListener;
 
     private ArrayList<Marker> orangeStops;
     private ArrayList<Marker> greenStops;
@@ -77,9 +79,25 @@ public class GoogleMaps extends Activity implements Observer {
 
         signalrManager = new SignalrManager(this,this);
 
-        gps = new GpsTracker(this);
-        Location location = gps.getLocation();
-        LatLng current = new LatLng(location.getLatitude(),location.getLongitude());
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                animateMarker(you, new LatLng(location.getLatitude(),location.getLongitude()),false);
+            }
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {}
+            @Override
+            public void onProviderEnabled(String s) {}
+            @Override
+            public void onProviderDisabled(String s) {}
+        };
+
+        manager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,10,locationListener);
+
+        Location lastKnown = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        LatLng current = new LatLng(lastKnown.getLatitude(),lastKnown.getLongitude());
 
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
                 .getMap();
@@ -136,7 +154,7 @@ public class GoogleMaps extends Activity implements Observer {
 
     private void centerToMarker()
     {
-        Location newPosition = gps.getLocation();
+        Location newPosition = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         LatLng newLatLng = new LatLng(newPosition.getLatitude(),newPosition.getLongitude());
 
         animateMarker(you,newLatLng,false);

@@ -21,8 +21,7 @@ import java.security.Provider;
 public class Driver extends Activity {
     private SignalrManager signalrManager;
     private LocationListener locationListener;
-    private GpsTracker gpsTracker;
-    private Location currentLocation;
+    private LocationManager manager;
     private EditText text;
 
     @Override
@@ -66,6 +65,7 @@ public class Driver extends Activity {
         });
 
         text = (EditText) findViewById(R.id.NameBox);
+        manager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
     }
 
     private void start()
@@ -82,7 +82,6 @@ public class Driver extends Activity {
             @Override
             public void onLocationChanged(Location location) {
                 signalrManager.sendMessage(text.getText().toString(), Integer.parseInt(capacity.getText().toString()), location);
-                currentLocation = location;
             }
             @Override
             public void onStatusChanged(String s, int i, Bundle bundle) {}
@@ -91,10 +90,8 @@ public class Driver extends Activity {
             @Override
             public void onProviderDisabled(String s) {}
         };
-        gpsTracker = new GpsTracker(this);
-        currentLocation = gpsTracker.getLocation();
-        //LocationManager manager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-        //manager.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,10,locationListener);
+
+        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,3,locationListener);
         //manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,5000,3, locationListener);
     }
 
@@ -118,7 +115,7 @@ public class Driver extends Activity {
     {
         EditText text = (EditText) findViewById(R.id.NameBox);
         EditText capacity = (EditText) findViewById(R.id.CapacityText);
-        signalrManager.sendMessage(text.getText().toString(), Integer.parseInt(capacity.getText().toString()),currentLocation);
+        signalrManager.sendMessage(text.getText().toString(), Integer.parseInt(capacity.getText().toString()),manager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
     }
 
     private void changeCapacity(String operation)
